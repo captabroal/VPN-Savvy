@@ -1,0 +1,31 @@
+# Secrets and local state
+*.key
+*.pem
+*.p12
+*.pfx
+*.env
+.env*
+!*.env.example
+
+# Tailscale / auth / local state
+var-lib-tailscale/
+tailscale-state/
+*.authkey
+*.token
+
+# Logs and transient output
+*.log
+logs/
+*.tmp
+*.bak
+
+# Local tooling
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Python / Node if helper tooling is added later
+__pycache__/
+*.py[cod]
+node_modules/

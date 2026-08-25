@@ -12,7 +12,7 @@ The project is designed for personal, region-specific internet egress from lapto
 - Server-side DNS kept independent of Tailscale (`--accept-dns=false`)
 - Tailscale-recommended UDP GRO forwarding optimization for Linux exit nodes
 - Persistent GRO settings using `networkd-dispatcher`
-- Verification script for service health, routing, forwarding, GRO, public IP, and Tailscale connectivity
+- Read-only live audit and verification scripts
 - OCI networking guidance for direct UDP connectivity on port `41641`
 
 ## What this does **not** contain
@@ -87,7 +87,17 @@ sudo tailscale up --hostname=mumbai-vpn
 
 Open the authentication URL shown by Tailscale and complete sign-in.
 
-### 5. Configure the exit node
+### 5. Preview the exit-node changes
+
+Before making system changes, run the dry-run mode:
+
+```bash
+bash configure-exit-node.sh --dry-run
+```
+
+This reports the detected outbound interface and current forwarding/GRO/service state without modifying the VM.
+
+### 6. Configure the exit node
 
 ```bash
 bash configure-exit-node.sh
@@ -95,7 +105,17 @@ bash configure-exit-node.sh
 
 Then approve the machine for **Use as exit node** in the Tailscale admin console if your tailnet requires approval.
 
-### 6. Verify
+### 7. Audit the live node
+
+`audit-live.sh` is intentionally read-only. It does not use `sudo` and does not write configuration:
+
+```bash
+bash audit-live.sh
+```
+
+It checks the live service, exit-node advertisement, forwarding, persistence, GRO state, networkd-dispatcher persistence, public IP, netcheck, NIC counters, failed units, and reboot state.
+
+### 8. General verification
 
 ```bash
 bash verify.sh
@@ -125,6 +145,7 @@ Then confirm your client-facing public IP is the OCI VM's public IP.
 ├── .gitignore
 ├── install.sh
 ├── configure-exit-node.sh
+├── audit-live.sh
 ├── verify.sh
 ├── config/
 │   └── 99-tailscale.conf
@@ -142,6 +163,8 @@ The scripts intentionally avoid generic "VPN speed tweak" recipes. They apply on
 ```bash
 ethtool -K <outbound-interface> rx-udp-gro-forwarding on rx-gro-list off
 ```
+
+The outbound interface is detected dynamically using the route that would carry normal internet traffic.
 
 No automatic BBR changes, MTU guessing, custom kernels, IRQ pinning, or broad sysctl tuning are applied.
 

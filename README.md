@@ -4,6 +4,28 @@ A small, reproducible setup for running a **Tailscale exit node on an Oracle Clo
 
 The project is designed for personal, region-specific internet egress from laptops, phones, and TV devices while keeping the server configuration simple, auditable, and easy to rebuild.
 
+## Validation status
+
+**Production-validated on 26 August 2026** against a live OCI Ampere A1 ARM64 exit node after reboot.
+
+Validated environment:
+
+- Ubuntu 24.04.4 LTS
+- OCI kernel `6.17.0-1020-oracle`
+- 2 OCPU / 12 GB RAM
+- Tailscale `1.102.2`
+- IPv4 + IPv6 forwarding persisted
+- UDP GRO forwarding persisted across reboot
+- `networkd-dispatcher` healthy and enabled
+- Tailscale exit-node advertisement persisted
+- UDP connectivity healthy
+- NIC errors/drops: zero at validation time
+- failed systemd units: zero
+- reboot-required state: clear
+- live audit result: **PASS=15 / WARN=0 / FAIL=0**
+
+The live deployment also independently demonstrated a direct Tailscale peer path rather than DERP relay. No live IP addresses, credentials, device identities, or account-specific secrets are published in this repository.
+
 ## What this configures
 
 - Official Tailscale client on Ubuntu

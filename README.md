@@ -74,7 +74,7 @@ cd VPN-Savvy
 ### 3. Install prerequisites and Tailscale
 
 ```bash
-./install.sh
+bash install.sh
 ```
 
 ### 4. Authenticate the VM to your tailnet
@@ -90,7 +90,7 @@ Open the authentication URL shown by Tailscale and complete sign-in.
 ### 5. Configure the exit node
 
 ```bash
-./configure-exit-node.sh
+bash configure-exit-node.sh
 ```
 
 Then approve the machine for **Use as exit node** in the Tailscale admin console if your tailnet requires approval.
@@ -98,7 +98,7 @@ Then approve the machine for **Use as exit node** in the Tailscale admin console
 ### 6. Verify
 
 ```bash
-./verify.sh
+bash verify.sh
 ```
 
 From a client device, select the new exit node and confirm:

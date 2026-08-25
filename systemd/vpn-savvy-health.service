@@ -1,0 +1,15 @@
+[Unit]
+Description=VPN-Savvy periodic health check
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/savvy/vpn/scripts/health-check.sh
+Nice=19
+IOSchedulingClass=idle
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/savvy/vpn/logs
